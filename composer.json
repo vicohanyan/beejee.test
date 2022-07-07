@@ -1,0 +1,25 @@
+{
+  "name": "beejee/project",
+  "type": "project",
+  "description": "The Test Framework.",
+  "keywords": ["framework", "Test"],
+  "license": "MIT",
+  "require": {
+    "php": "^7.4|^8.1"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "core\\": "core",
+      "engine\\": "engine"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
