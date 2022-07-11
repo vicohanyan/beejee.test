@@ -5,5 +5,4 @@ namespace core;
 class Controller
 {
 
-
 }

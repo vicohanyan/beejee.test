@@ -2,17 +2,17 @@
 
 namespace core\db;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
 use Exception;
-use PDO;
 
 /**
  * Class Database
  * @package core\db
  */
-
 class Database
 {
-    private PDO $connection;
+    public static EntityManager $entityManager;
     private static Database $instance;
 
     /**
@@ -21,13 +21,24 @@ class Database
      */
     private function __construct()
     {
-        $filename = DOCUMENT_ROOT . DIRECTORY_SEPARATOR . 'configuration' . DIRECTORY_SEPARATOR . 'database.ini';
+        $filename = __DIR__ . '/../../config/database.ini';
         $config = parse_ini_file($filename, true);
-        if(empty($config)) throw new Exception("Database config file not found");
-        try{
-            $this->connection = new PDO("{$config['DATABASE_TYPE']}:host='{$config['HOST']}';dbname='{$config['NAME']}'",$config['USERNAME'],$config['PASSWORD']);
-        } catch(Exception $e){
-            throw new Exception("Connection failure ");
+        if (empty($config)) throw new Exception("Database config file not found");
+        try {
+            $configuration = ORMSetup::createAnnotationMetadataConfiguration(
+                $paths = [__DIR__ . '/../../engine/Models'],
+                $isDevMode = true
+            );
+            $connection_parameters = [
+                'dbname'    => $config['NAME'],
+                'user'      => $config['USERNAME'],
+                'password'  => $config['PASSWORD'],
+                'host'      => $config['HOST'],
+                'driver'    => $config['DATABASE_DRIVER']
+            ];
+            self::$entityManager = EntityManager::create($connection_parameters, $configuration);
+        } catch (Exception $e) {
+            throw new Exception("Connection failure");
         }
     }
 
@@ -41,10 +52,5 @@ class Database
             static::$instance = new static();
         }
         return static::$instance;
-    }
-
-    public function __destruct()
-    {
-        $this->connection = null;
     }
 }

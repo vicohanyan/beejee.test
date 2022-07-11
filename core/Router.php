@@ -10,7 +10,8 @@ final class Router
         $controller_name = 'Main';
         $action_name = 'Index';
 
-        $routes = explode('/', $_SERVER['REQUEST_URI']);
+        $request = parse_url($_SERVER['REQUEST_URI']);
+        $routes = explode("/",$request["path"]);
         if (!empty($routes[1])) {
             $controller_name = $routes[1];
         }
@@ -18,7 +19,7 @@ final class Router
             $action_name = $routes[2];
         }
 
-        $controller = "engine\Controllers\\". $controller_name . 'Controller';
+        $controller = "engine\Controllers\\". ucfirst($controller_name) . 'Controller';
         $action = 'action' . ucfirst($action_name);
         if (!class_exists("$controller")) {
             Router::ErrorPage404();
@@ -27,14 +28,18 @@ final class Router
         if (!method_exists($execute, $action) || !is_callable(array($execute, $action))) {
             Router::ErrorPage404();
         }
-        $execute->$action();
+        try{
+            $execute->$action();
+        }catch (\Exception $exception){
+            Router::ErrorPage404();
+        }
     }
 
     static function ErrorPage404(): void
     {
-        $host = 'http://' . $_SERVER['HTTP_HOST'] . '/';
-        header('HTTP/1.1 404 Not Found');
-        header("Status: 404 Not Found");
-        header('Location:' . $host . '404');
+//        $host = 'http://' . $_SERVER['HTTP_HOST'] . '/';
+//        header('HTTP/1.1 404 Not Found');
+//        header("Status: 404 Not Found");
+//        header('Location:' . $host . '404');
     }
 }

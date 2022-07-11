@@ -14,11 +14,13 @@ class View
      */
     public static function render(string $view, array $data = []): void
     {
-        $viewPath = __DIR__ . '/../Views/' . $view . '.php';
-        if (!file_exists($viewPath)) {
+        var_dump("asdfasdf");
+        $layout = "";
+        $contentView = __DIR__ . '/../engine/Views/' . $view . '.php';
+        if (!file_exists($contentView)) {
             throw new ErrorException('view cannot be found');
         }
-        include($viewPath);
+        include_once( __DIR__ . '/../engine/layout/layout.php');
     }
 
 }

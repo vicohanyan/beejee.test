@@ -1,13 +1,14 @@
 {
   "name": "beejee/project",
   "type": "project",
-  "description": "The Test Framework.",
+  "description": "beejee todo-list.",
   "keywords": ["framework", "Test"],
-  "license": "MIT",
   "require": {
-    "php": "^7.4|^8.1"
-  },
-  "require-dev": {
+    "php": "^7.4|^8.1",
+    "doctrine/annotations": "1.13.2",
+    "doctrine/dbal": "^3.2",
+    "doctrine/orm": "^2.11.0",
+    "symfony/cache": "^5.4"
   },
   "autoload": {
     "psr-4": {
